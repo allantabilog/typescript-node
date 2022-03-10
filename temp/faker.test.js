@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker'
+    import { faker } from '@faker-js/faker'
 
 const randomName = faker.name.findName() ;
 const randomEmail = faker.internet.email();
