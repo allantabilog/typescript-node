@@ -11,5 +11,6 @@ module.exports = {
     '!**/*.d.ts',
     '!**/node_modules/**',
   ],
-  testTimeout: 30000, // Increased timeout for container tests
+  testTimeout: 30000, // Increased timeout for container tests,
+  ...(process.env.CI ? {} : {setupFilesAfterEnv: ['<rootDir>/setup.ts']}) 
 };
