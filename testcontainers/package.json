@@ -9,8 +9,11 @@
     "@aws-sdk/lib-dynamodb": "^3.855.0",
     "@aws-sdk/util-retry": "^3.370.0",
     "@aws-sdk/util-user-agent-node": "^3.855.0",
+    "@shiftcoders/dynamo-easy": "^7.1.1",
+    "aws-sdk": "^2.1692.0",
     "jest": "^30.0.5",
     "redis": "^5.6.1",
+    "reflect-metadata": "^0.1.14",
     "testcontainers": "^11.4.0",
     "tslib": "^2.8.1",
     "typescript": "^5.8.3"

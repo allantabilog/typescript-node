@@ -2,6 +2,7 @@ import { createClient, RedisClientType } from "redis";
 import { GenericContainer, StartedTestContainer } from "testcontainers";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import * as AWS from "aws-sdk";
 
 // declare global types
 declare global {
@@ -10,6 +11,7 @@ declare global {
   var dynamoContainer: StartedTestContainer;
   var dynamoClient: DynamoDBClient;
   var dynamoDocClient: DynamoDBDocumentClient;
+  var awsDynamoClient: AWS.DynamoDB; // and SDK v2 client for dynamo-easy
 }
 
 let container: StartedTestContainer
@@ -17,6 +19,7 @@ let client: RedisClientType
 let dynamoContainer: StartedTestContainer;
 let dynamoClient: DynamoDBClient;
 let dynamoDocClient: DynamoDBDocumentClient;
+let awsDynamoClient: AWS.DynamoDB;
 
 beforeAll(async () => {
   console.log('🚀 Starting Redis container...')
@@ -37,6 +40,18 @@ beforeAll(async () => {
     .withCommand(["-jar", "DynamoDBLocal.jar", "-inMemory", "-sharedDb"])
     .start();
 
+  AWS.config.update({
+    region: 'us-east-1',
+    accessKeyId: 'test',
+    secretAccessKey: 'test',
+  })
+
+  awsDynamoClient = new AWS.DynamoDB({
+    endpoint: `http://${dynamoContainer.getHost()}:${dynamoContainer.getMappedPort(8000)}`,
+    region: 'us-east-1',
+    accessKeyId: 'test',
+    secretAccessKey: 'test',
+  })
     dynamoClient = new DynamoDBClient({
       endpoint: `http://${dynamoContainer.getHost()}:${dynamoContainer.getMappedPort(8000)}`,
       region: 'us-east-1',
@@ -54,6 +69,7 @@ beforeAll(async () => {
   global.dynamoClient = dynamoClient;
   global.dynamoDocClient = dynamoDocClient;
   global.dynamoContainer = dynamoContainer;
+  global.awsDynamoClient = awsDynamoClient;
 
   console.log('✅ All containers started and clients connected')
 });
